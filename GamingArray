@@ -1,0 +1,18 @@
+#!/bin/python3
+
+import sys
+
+
+g = int(input().strip())
+for a0 in range(g):
+    n = int(input().strip())
+    game = input().split()
+    newarray = [int(game[0])]
+    for i in game: 
+        if int(i) > newarray[-1]: 
+            newarray.append(int(i))
+    if len(newarray) % 2 == 0: 
+        print('ANDY')
+    else: 
+        print('BOB')
+        
