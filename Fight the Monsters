@@ -1,0 +1,22 @@
+
+import sys
+
+def getMaxMonsters(n, hit, t, h):
+    monsterskilled = 0
+    timeleft = t 
+    h.sort()
+    for i in h: 
+        timeneeded = (i//hit) + 1
+        if i % hit == 0: 
+            timeneeded = i//hit
+        if timeleft >= timeneeded: 
+            monsterskilled += 1 
+            timeleft = timeleft - timeneeded
+        else:
+            return monsterskilled
+
+n, hit, t = input().strip().split(' ')
+n, hit, t = [int(n), int(hit), int(t)]
+h = list(map(int, input().strip().split(' ')))
+result = getMaxMonsters(n, hit, t, h)
+print(result)
