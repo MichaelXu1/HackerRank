@@ -1,0 +1,52 @@
+#!/bin/python3
+
+import sys
+
+def circularWalk(n, s, t, r_0, g, seed, p):
+    # Complete this function
+    circle = [r_0]
+    for i in range(1,n): 
+        circle.append(((circle[-1] * g) + seed) % p)
+    stack = [s]
+    tree = {}
+    tree[stack[0]] = 0
+    while stack:
+        for i in range(-circle[stack[0]],0):
+            newindex = (stack[0] + i) % len(circle)
+            if newindex == t: 
+                return tree[stack[0]] + 1
+            if newindex not in tree:
+                tree[newindex] = tree[stack[0]] + 1
+                if newindex == 0: 
+                    if circle[1] > circle[0]:
+                        continue
+                elif circle[newindex] < circle[(newindex + 1) % len(circle)]:
+                    continue
+                else: 
+                    stack.append(newindex)
+        for i in range(1, (circle[stack[0]]+1)):
+            newindex = (stack[0] + i) % len(circle)
+            if newindex == t: 
+                return tree[stack[0]] + 1
+            if newindex not in tree:
+                tree[newindex] = tree[stack[0]] + 1
+                if newindex == 0:
+                    if circle[-1] > circle[0]:
+                        continue
+                    elif circle[newindex] < circle[(newindex - 1) % len(circle)]:
+                        continue
+                    else: 
+                        stack.append(newindex)
+
+        stack.pop(0)
+    if t not in tree: 
+        return -1
+    else:
+        return(tree[t])
+    
+n, s, t = input().strip().split(' ')
+n, s, t = [int(n), int(s), int(t)]
+r_0, g, seed, p = input().strip().split(' ')
+r_0, g, seed, p = [int(r_0), int(g), int(seed), int(p)]
+result = circularWalk(n, s, t, r_0, g, seed, p)
+print(result)
