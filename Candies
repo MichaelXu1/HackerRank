@@ -1,0 +1,35 @@
+n = int(input())
+
+totalcandies = 1
+currentcandies = 1
+#ratings = [int(input())]
+lastrating = int(input())
+#candies = [1]
+desccounter = 1
+for i in range(0,n-1): 
+    rating = int(input())
+    if rating > lastrating: 
+        currentcandies += 1
+        desccounter = 0
+    elif rating == lastrating:
+        currentcandies = 1
+        desccounter = 1
+    else: 
+        totalcandies += desccounter
+        desccounter += 1
+        '''if ratings[-1] > rating and candies[-1] == 1:  
+            candies[-1] += 1
+            for i in range(2,len(ratings)+1):
+                if ratings[-i] > ratings[-(i-1)] and candies[-i] <= candies[-(i-1)]: 
+                    candies[-i] += 1
+                else:
+                    break
+        '''
+        currentcandies = 1    
+    #candies.append(currentcandies)
+    #ratings.append(rating)
+    lastrating = rating
+    totalcandies += currentcandies
+
+    
+print(totalcandies)
