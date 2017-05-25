@@ -1,0 +1,65 @@
+#!/bin/python3
+
+import sys
+
+
+s_len = int(input().strip())
+a = input().strip()
+
+def twocharacters(s):
+
+    letterdict = {}
+    for i in enumerate(s): 
+        if i[1] in letterdict:
+            letterdict[i[1]].append(i[0])
+        else: 
+            letterdict[i[1]] = [i[0]]
+    letterindices = sorted(letterdict.values(), key = len, reverse = True)
+
+    if len(letterindices) == 1: 
+        return(0)
+    for j in range(0, len(letterindices)-1): 
+        potentialanswer = True
+        if len(letterindices[j]) - len(letterindices[j+1]) > 1: 
+            continue
+        elif len(letterindices[j]) - len(letterindices[j+1]) == 1:              
+            if letterindices[j][0] < letterindices[j+1][0]:
+                for i in range(1, len(letterindices[j])-1):
+                    if letterindices[j][i] < letterindices[j+1][i] and letterindices[j][i] > letterindices[j+1][i-1]: 
+                        continue
+                    else: 
+                        potentialanswer = False
+                        break
+
+                if letterindices[j][-1] < letterindices [j+1][-1]:
+                    potentialanswer = False
+                if potentialanswer: 
+                    return(len(letterindices[j]) + len(letterindices[j+1]))
+        elif len(letterindices[j]) == len(letterindices[j+1]): 
+            second = j+1
+            while len(letterindices[j]) == len(letterindices[second]):  
+                potentialanswer = True
+                if letterindices[j][0] > letterindices[second][0]:
+                     for i in range(1, len(letterindices[j])):
+                        if letterindices[j][i] > letterindices[second][i] and letterindices[second][i] > letterindices[j][i-1]: 
+                            continue
+                        else: 
+                            potentialanswer = False
+                            break
+                else:
+                     for i in range(1, len(letterindices[j])):
+                        if letterindices[j][i] < letterindices[second][i] and letterindices[j][i] > letterindices[second][i-1]: 
+                            continue
+                        else: 
+                            potentialanswer = False
+                            break
+                if potentialanswer: 
+                    return(len(letterindices[j]) + len(letterindices[j+1]))
+                if(second < len(letterindices) - 1): 
+                    second += 1
+                else:
+                    break
+    return(0)            
+                
+                    
+print(twocharacters(a))                  
