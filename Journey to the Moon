@@ -1,0 +1,68 @@
+import operator as op
+
+line = input().split()
+num, p = int(line[0]), int(line[1])
+
+astronautnations = {}
+setdictionaries = {}
+
+for i in range(0,num): 
+    astronautnations[i] = (i,1)
+    
+def find(vertice, dict):
+    notfound = True
+    pointer = vertice
+    while notfound:
+        if dict[pointer][0] != pointer:
+            pointer = dict[pointer][0]
+        else:
+            notfound = False
+            return dict[pointer][0]
+
+def union(dict, vertice1, vertice2):
+    head1 = find(vertice1, dict)
+    head2 = find(vertice2, dict)
+    if dict[head1][1] > dict[head2][1]:
+        dict[head2] = (head1, dict[head2][1])
+        dict[head1] = (head1, dict[head1][1] + dict[head2][1])
+    elif dict[head1][1] < dict[head2][1]:
+        dict[head1] = (head2, dict[head1][1])
+        dict[head2] = (head2, dict[head1][1] + dict[head2][1])
+    else:
+        dict[head2] = (head1, dict[head2][1])
+        dict[head1] = (head1, dict[head1][1] + dict[head2][1])
+    
+for i in range(0,p): 
+    line = input().split()
+    head1 = find(int(line[0]), astronautnations)
+    head2 = find(int(line[1]), astronautnations)
+    if head1 != head2:
+        if head1 not in setdictionaries: 
+            if head2 not in setdictionaries: 
+                setdictionaries[head1] = 2 
+            else:
+                setdictionaries[head2] += 1 
+        elif head2 not in setdictionaries:
+            setdictionaries[head1] += 1
+        else:     
+            if astronautnations[head1][1] < astronautnations[head2][1]:
+                setdictionaries[head2] += setdictionaries[head1]
+                del setdictionaries[head1]
+            else:
+                setdictionaries[head1] += setdictionaries[head2]
+                del setdictionaries[head2]
+        union(astronautnations, head1, head2)
+##n choose 2 = n!
+     
+combos = (num * (num-1))/2           
+
+for i in setdictionaries.values():
+    if i == 1: 
+        continue
+    else:
+        combos -= (i * (i-1))/2
+
+print(int(combos))
+    
+    
+    
