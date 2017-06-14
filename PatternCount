@@ -1,0 +1,30 @@
+#!/bin/python3
+
+import sys
+
+def patternCount(s):
+    patterns = 0 
+    possiblepattern = False
+    for i in range(0, len(s)): 
+        if possiblepattern: 
+            if s[i] == '0': 
+                continue
+            elif s[i] == '1': 
+                patterns += 1
+                if i + 1 < len(s) and s[i+1] != '0':
+                    possiblepattern = False
+                continue
+            else: 
+                possiblepattern = False
+                continue
+        if s[i] == '1' and i + 1 < len(s) and s[i+1] == '0': 
+            possiblepattern = True
+            continue
+    return patterns
+            
+
+q = int(input().strip())
+for a0 in range(q):
+    s = input().strip()
+    result = patternCount(s)
+    print(result)
