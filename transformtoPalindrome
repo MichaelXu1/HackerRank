@@ -1,0 +1,82 @@
+#!/bin/python3
+## more efficient dynamic programming algo
+import sys
+
+n,k,m = input().strip().split(' ')
+n,k,m = [int(n),int(k),int(m)]
+#n letters in alphabet, k transformations, m = length of sequence
+
+def find(vertice, dict):
+    notfound = True
+    pointer = vertice
+    while notfound:
+        if dict[pointer][0] != pointer:
+            pointer = dict[pointer][0]
+        else:
+            notfound = False
+            return dict[pointer][0]
+
+def union(dict, vertice1, vertice2):
+    head1 = find(vertice1, dict)
+    head2 = find(vertice2, dict)
+    if dict[head1][1] > dict[head2][1]:
+        dict[head2] = (head1, dict[head2][1])
+        dict[head1] = (head1, dict[head1][1] + 1)
+    elif dict[head1][1] < dict[head2][1]:
+        dict[head1] = (head2, dict[head1][1])
+        dict[head2] = (head2, dict[head1][1] + 1)
+    else:
+        dict[head2] = (head1, dict[head2][1])
+        dict[head1] = (head1, dict[head1][1] + 1)
+
+     
+unionfinddict = {}
+        
+transformations = {}
+for i in range(n):
+    transformations[i+1] = (i+1,1)
+
+for a0 in range(k):
+    x,y = input().strip().split(' ')
+    x,y = [int(x),int(y)]
+    
+    head1 = find(x, transformations)
+    head2 = find(y, transformations)
+    union(transformations, head1, head2)
+    
+a = list(map(int, input().strip().split(' ')))
+
+
+for i in range(0, len(a)): 
+    if a[i] not in unionfinddict: 
+        lookup = a[i]
+        a[i] = find(a[i], transformations)
+        unionfinddict[lookup] = a[i]
+    else:
+        a[i] = unionfinddict[a[i]]
+
+
+def lps(str):
+    n = len(str)
+ 
+    L = [[0 for x in range(n)] for x in range(n)]
+
+    for i in range(n):
+        L[i][i] = 1
+ 
+
+    for cl in range(2, n+1):
+        for i in range(n-cl+1):
+            j = i+cl-1
+            if str[i] == str[j] and cl == 2:
+                L[i][j] = 2
+            elif str[i] == str[j]:
+                L[i][j] = L[i+1][j-1] + 2
+            else:
+                L[i][j] = max(L[i][j-1], L[i+1][j]);
+ 
+    return L[0][n-1]
+print(lps(a))
+
+
+#a = sequence
